@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class playerController : MonoBehaviour
 {
@@ -14,26 +15,30 @@ public class playerController : MonoBehaviour
 
     void playerMovement(float time) 
     {
-       
+       //oops no switch case
         Vector3 totalMovement = Vector3.zero;
-        if (Input.GetKey(KeyCode.W))
+        if (UnityEngine.Input.GetKey(KeyCode.W))
         {
             totalMovement += Vector3.back;
         }
-        if (Input.GetKey(KeyCode.S))
+        if (UnityEngine.Input.GetKey(KeyCode.S))
         {
             totalMovement += Vector3.forward;
         }
-        if (Input.GetKey(KeyCode.A))
+        if (UnityEngine.Input.GetKey(KeyCode.A))
         {
             totalMovement += Vector3.right;
         }
-        if (Input.GetKey(KeyCode.D))
+        if (UnityEngine.Input.GetKey(KeyCode.D))
         {
             totalMovement += Vector3.left;
         }
+        float horizontalInput = UnityEngine.Input.GetAxis("Mouse X");
+        float verticalInput = UnityEngine.Input.GetAxis("Mouse Y");
+        gameObject.transform.GetChild(0).transform.Rotate(new Vector3(-verticalInput, horizontalInput, 0));
+        
         gravity();
-        controller.Move(totalMovement.normalized * playerSpeed * Time.deltaTime);
+        controller.Move(totalMovement.normalized * (playerSpeed+PlayerInformationManager.playerPowerUP[enums.powerUps.speed]) * Time.deltaTime);
     }
     void gravity() 
     {
@@ -49,7 +54,8 @@ public class playerController : MonoBehaviour
     {
         switch (other.gameObject.tag)
         {
-            case "Coins": PlayerInformationManager.playerStats[enums.playerStat.coins]++; UIManager.instance.updateCoinsText(); Destroy(other.gameObject); break;
+            case "Coins": PlayerInformationManager.playerStats[enums.playerStat.coins]+=1+PlayerInformationManager.playerPowerUP[enums.powerUps.extraMoneyEarned]; UIManager.instance.updateCoinsText(); Destroy(other.gameObject); break;
+            case "Finish": GameManager.instance.gameOver(enums.loseMethod.win); break;
             case "Void": GameManager.instance.gameOver(enums.loseMethod.falling); break;
         }
     }

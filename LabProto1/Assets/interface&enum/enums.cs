@@ -5,18 +5,19 @@ public class enums
     public enum powerUps 
     {
         speed,
-        extraTime,
         extraMoneyEarned,
     }
     public enum playerStat
     {
         coins,
-        bestCompletionTime
+        bestCompletionTime,
+        timer 
     }
     public enum loseMethod
     {
         time,
-        falling
+        falling,
+        win
        
     }
 }

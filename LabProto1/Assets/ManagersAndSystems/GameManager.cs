@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     
     void setUpGame() 
     {
-        for (int i = 0; i < coins; i++) 
+        for (int i = 0; i < coins * (PlayerInformationManager.playerStats[enums.playerStat.coins]/2+1); i++) 
         {
             float randomX = Random.Range(-14.21f, 53.12f);
             float randomZ = Random.Range(-235f, 256f);
@@ -29,15 +29,17 @@ public class GameManager : MonoBehaviour
    
     public void gameOver(enums.loseMethod loseMethod) 
     {
-        Time.timeScale = 0;
-        JSONManager.instance.SaveData();
        
+        Time.timeScale = 0;
+        JSONManager.instance.SaveData();       
         UIManager.instance.gameOver(loseMethod);
-        StartCoroutine(instance.loadMenu());
+        StartCoroutine(instance.loadMenu(loseMethod));
+        
     }
-    IEnumerator loadMenu() 
+    IEnumerator loadMenu(enums.loseMethod losemethod) 
     {
         yield return new WaitForSecondsRealtime(3);
+        if (losemethod == enums.loseMethod.win) { PlayerInformationManager.playerStats[enums.playerStat.timer] = 0; }
         SceneManager.LoadScene(0);
     }
 }

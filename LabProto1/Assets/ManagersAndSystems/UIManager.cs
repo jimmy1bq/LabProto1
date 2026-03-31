@@ -2,7 +2,9 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditorInternal;
 using UnityEngine;
+//hmm can I generalize this? If I set this to don't destroy on load and allow this script to contain methods that could operate on UI then I could reuse it?
 
+//Like maybe a method that takes the gameObejct(textmeshpro) and operates on the text like "string : " + value; 
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
@@ -53,6 +55,12 @@ public class UIManager : MonoBehaviour
                 loseText.GetComponent<TextMeshProUGUI>().text = "You Lose! Time Ran Out!";
                 break;
             case enums.loseMethod.falling: loseText.GetComponent<TextMeshProUGUI>().text = "You Lose! You Fell Out Of The Map"; break;
+            case enums.loseMethod.win: 
+                loseText.GetComponent<TextMeshProUGUI>().text = "You Win!"; 
+                GameObject.FindGameObjectWithTag("BestTime").GetComponent<TextMeshProUGUI>().text = PlayerInformationManager.playerStats[enums.playerStat.bestCompletionTime].ToString();
+                PlayerInformationManager.instance.resetAndRecord(PlayerInformationManager.playerStats[enums.playerStat.timer]);
+             
+                break;
         }
         
     }

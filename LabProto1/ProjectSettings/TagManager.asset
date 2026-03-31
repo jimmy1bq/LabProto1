@@ -9,6 +9,10 @@ TagManager:
   - Coins
   - Void
   - loseText
+  - upgradeCoins
+  - upgradeSpeed
+  - timer
+  - BestTime
   layers:
   - Default
   - TransparentFX
