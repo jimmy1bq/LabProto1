@@ -9,7 +9,7 @@ public class ZombieAi : MonoBehaviour
     [SerializeField] entityStatSO stats;
     NavMeshAgent agent;
     Animation animationer;
-    AnimationState[] animationStates;
+    AnimationState[] animationStates = new AnimationState[8];
     GameObject player;
     Coroutine attackCoroutine;
 
@@ -24,9 +24,12 @@ public class ZombieAi : MonoBehaviour
         //get them into an array so we can access for later
         foreach (AnimationState states in animationer) 
         {
-            animationStates[i] = states;
+             Debug.Log(states);
+             animationStates[i] = states;
              i++;
         }
+        //we only need the zombie to jump the window once(play the animation once
+        animationer[animationStates[5].name].wrapMode = WrapMode.Once;
         agent.destination = player.transform.position;
         agent.autoTraverseOffMeshLink = false;    
         TickSystem.frequenttickTime.AddListener(trackPlayerPoistion);
@@ -41,27 +44,32 @@ public class ZombieAi : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //this should only happen when a board enters the zombies range AND only once so no need to check if theres an coroutine happening
-       
+
         if (other.gameObject.CompareTag("PotentialBoard") && other.gameObject.GetComponent<IDamageAble>() != null && other.gameObject.GetComponent<IDamageAble>().returnHP() > 0)
         {
             StartCoroutine(attackboard(other.gameObject));
         }
-        else 
+        else if (other.gameObject.CompareTag("Player"))
         {
-            agent.CompleteOffMeshLink();
+            animationer.Play(animationStates[0].name);
         }
+        
     }
     IEnumerator attackPlayer(GameObject player) 
     {
-        yield return null;
+        animationer.Play(animationStates[0].name);
+        yield return new WaitForSeconds(1);
     
     }
     IEnumerator attackboard(GameObject board) 
     {
         float hpLeft = attack(board);
-        if (hpLeft < 0) 
+        if (hpLeft <= 0) 
         {
-            agent.CompleteOffMeshLink();
+            animationer.Play(animationStates[5].name);
+           
+            // agent.CompleteOffMeshLink();
+
         }
         yield return new WaitForSeconds(1);
         StartCoroutine(attackboard(board)); 
@@ -69,8 +77,7 @@ public class ZombieAi : MonoBehaviour
 
     float attack(GameObject other) 
     {
-        AnimationClip clip = animationer.GetClip()
-        animationer.Play()
+        animationer.Play(animationStates[1].name);
         other.gameObject.GetComponent<IDamageAble>().takeDamage(stats.meleeDamage);
         return other.gameObject.GetComponent<IDamageAble>().returnHP();
     }
