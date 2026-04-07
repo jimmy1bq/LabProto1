@@ -9,11 +9,11 @@ public class TickSystem : MonoBehaviour
     //tick system allows you to remove update logic without needing to call and check an if statement inside update
     //helps a lot since update is called every frame
     public static TickSystem instance;
-    //every half of a second
+    //every 1 second
     public static UnityEvent<float> tickEvent = new UnityEvent<float>();
     //every frame
     public static UnityEvent<float> frequenttickTime = new UnityEvent<float>();
-    float tickRate = 0.1f;
+    float tickRate = 1f;
     float tickTimer = 0f;
     float totalTIme = 0f;
 

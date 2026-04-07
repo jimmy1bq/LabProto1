@@ -9,6 +9,8 @@ public class woodenBoardHp : MonoBehaviour, IDamageAble
     {
         health = stats.hp;
     }
+    //param  damageToTake: float to subtract off hp
+    //return the health left after taking damage
     public float takeDamage(float damageToTake) 
     {
         
@@ -17,6 +19,7 @@ public class woodenBoardHp : MonoBehaviour, IDamageAble
 
         return health;    
     }
+    //interface to return the hp upon getting called
     public float returnHP()
     {
         return health;
